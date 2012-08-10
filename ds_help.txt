@@ -1,8 +1,8 @@
-Host:     Ö÷»úÃû:ÔÚdruid.confÖĞÅäÖÃ                    ActPk:    ActivePeak,×î¸ß»î¶¯Á¬½ÓÊı
-MaxAct:   MaxActive, ×î´óÁ¬½ÓÊı                        ActPkT:   ActivePeakTime,×î¸ß»î¶¯Á¬½Ó²úÉúµÄÊ±¼ä         
-MinIdle:  MinIdle, ×îĞ¡Á¬½ÓÊı                          PhyCc:    PhysicalConnectCount,ÎïÀíÁ¬½ÓÊı 
-IniSize:  InitialSize, ³õÊ¼Á¬½ÓÊı                      LogicCc:  LogicConnectCount,Âß¼­Á¬½ÓÊı
-PoolCt:   PoolingCount,µ±Ç°¿ÕÏĞÁ¬½ÓÊı                  LCEC:     LogicConnectErrorCount,Âß¼­Á¬½Ó´íÎóÊı 
-ActCt:    ActiveCount,µ±Ç°»î¶¯Á¬½ÓÊı                   PCEC:     PhysicalConnectErrorCount,ÎïÀíÁ¬½Ó´íÎóÊı 
-PoolPk:   PoolingPeak,×î¸ß¿ÕÏĞÁ¬½ÓÊı                   PhyClose: PhysicalCloseCount,ÎïÀíÁ¬½Ó¹Ø±ÕÊı 
-PoolPkT:  PoolingPeakTime,×î¸ß¿ÕÁ¬½Ó²úÉúµÄÊ±¼ä        
+Host:     ä¸»æœºå:åœ¨druid.confä¸­é…ç½®                    ActPk:    ActivePeak,æœ€é«˜æ´»åŠ¨è¿æ¥æ•°
+MaxAct:   MaxActive, æœ€å¤§è¿æ¥æ•°                        ActPkT:   ActivePeakTime,æœ€é«˜æ´»åŠ¨è¿æ¥äº§ç”Ÿçš„æ—¶é—´         
+MinIdle:  MinIdle, æœ€å°è¿æ¥æ•°                          PhyCc:    PhysicalConnectCount,ç‰©ç†è¿æ¥æ•° 
+IniSize:  InitialSize, åˆå§‹è¿æ¥æ•°                      LogicCc:  LogicConnectCount,é€»è¾‘è¿æ¥æ•°
+PoolCt:   PoolingCount,å½“å‰ç©ºé—²è¿æ¥æ•°                  LCEC:     LogicConnectErrorCount,é€»è¾‘è¿æ¥é”™è¯¯æ•° 
+ActCt:    ActiveCount,å½“å‰æ´»åŠ¨è¿æ¥æ•°                   PCEC:     PhysicalConnectErrorCount,ç‰©ç†è¿æ¥é”™è¯¯æ•° 
+PoolPk:   PoolingPeak,æœ€é«˜ç©ºé—²è¿æ¥æ•°                   PhyClose: PhysicalCloseCount,ç‰©ç†è¿æ¥å…³é—­æ•° 
+PoolPkT:  PoolingPeakTime,æœ€é«˜ç©ºè¿æ¥äº§ç”Ÿçš„æ—¶é—´        

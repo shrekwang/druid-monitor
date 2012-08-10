@@ -1,10 +1,10 @@
-ExeCnt : executeCount,Ö´ĞĞ´ÎÊı                     Histo: Histogram,Ö´ĞĞÊ±¼äÇø¼ä·Ö²¼
-LastTime: ×îºóÖ´ĞĞÊ±¼ä                             MaxTimespan: ×î³¤Ò»´ÎÖ´ĞĞºÄ·ÑµÄÊ±¼ä
-MOT: MaxTimespanOccurTime,×î³¤Ò»´ÎÖ´ĞĞµÄÊ±¿Ì
-ExeHoldHisto: ExecuteAndResultHoldTimeHistogram,´ÓÖ´ĞĞSQLµ½ResultSet¹Ø±ÕºÄ·ÑµÄÊ±¼ä
+ExeCnt : executeCount,æ‰§è¡Œæ¬¡æ•°                     Histo: Histogram,æ‰§è¡Œæ—¶é—´åŒºé—´åˆ†å¸ƒ
+LastTime: æœ€åæ‰§è¡Œæ—¶é—´                             MaxTimespan: æœ€é•¿ä¸€æ¬¡æ‰§è¡Œè€—è´¹çš„æ—¶é—´
+MOT: MaxTimespanOccurTime,æœ€é•¿ä¸€æ¬¡æ‰§è¡Œçš„æ—¶åˆ»
+ExeHoldHisto: ExecuteAndResultHoldTimeHistogram,ä»æ‰§è¡ŒSQLåˆ°ResultSetå…³é—­è€—è´¹çš„æ—¶é—´
 
-HistoºÍExeHoldHistoµÄÊ±¼ä·Ö²¼ËµÃ÷:
-¹²8¶Î,ÒÀ´ÎÎª1ºÁÃëÒÔÏÂ, 1-10ºÁÃë,10-100ºÁÃë, 100-1000ºÁÃë,1-10Ãë,10-100Ãë,100-1000Ãë,1000ÃëÒÔÉÏ
+Histoå’ŒExeHoldHistoçš„æ—¶é—´åˆ†å¸ƒè¯´æ˜:
+å…±8æ®µ,ä¾æ¬¡ä¸º1æ¯«ç§’ä»¥ä¸‹, 1-10æ¯«ç§’,10-100æ¯«ç§’, 100-1000æ¯«ç§’,1-10ç§’,10-100ç§’,100-1000ç§’,1000ç§’ä»¥ä¸Š
 
-FetchRowCountHistogram·Ö²¼ËµÃ÷
-¹²5¶Î, ÒÀ´ÎÎª0Ìõ¼ÇÂ¼,1-10Ìõ¼ÇÂ¼,10-100Ìõ¼ÇÂ¼,100-1000Ìõ¼ÇÂ¼, 1000Ìõ¼ÇÂ¼ÒÔÉÏ
+FetchRowCountHistogramåˆ†å¸ƒè¯´æ˜
+å…±5æ®µ, ä¾æ¬¡ä¸º0æ¡è®°å½•,1-10æ¡è®°å½•,10-100æ¡è®°å½•,100-1000æ¡è®°å½•, 1000æ¡è®°å½•ä»¥ä¸Š
