@@ -12,14 +12,15 @@ yum install python-simplejson
 
 另外监控脚本使用的是druid开放的json API, 所以你还需要在web.xml中作如下配置
 
-  <servlet>
-      <servlet-name>DruidStatView</servlet-name>
-      <servlet-class>com.alibaba.druid.support.http.StatViewServlet</servlet-class>
-  </servlet>
-  <servlet-mapping>
+    <servlet>
+        <servlet-name>DruidStatView</servlet-name>
+        <servlet-class>com.alibaba.druid.support.http.StatViewServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
       <servlet-name>DruidStatView</servlet-name>
       <url-pattern>/druid/*</url-pattern>
-  </servlet-mapping>
+    </servlet-mapping>
+  
 
 
 
