@@ -1,3 +1,3 @@
-¼à¿Ø½Å±¾ĞèÒªpythonµÄsimplejsonÄ£¿é
-Èç¹ûÊÇredhatÏµµÄ(rhel, fedora, centosµÈ),¿ÉÒÔÓÃyumÀ´°²×°
+ç›‘æ§è„šæœ¬éœ€è¦pythonçš„simplejsonæ¨¡å—
+å¦‚æœæ˜¯redhatç³»çš„(rhel, fedora, centosç­‰),å¯ä»¥ç”¨yumæ¥å®‰è£…
 yum install python-simplejson
