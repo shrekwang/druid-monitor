@@ -1,0 +1,10 @@
+ExeCnt : executeCount,执行次数                     Histo: Histogram,执行时间区间分布
+LastTime: 最后执行时间                             MaxTimespan: 最长一次执行耗费的时间
+MOT: MaxTimespanOccurTime,最长一次执行的时刻
+ExeHoldHisto: ExecuteAndResultHoldTimeHistogram,从执行SQL到ResultSet关闭耗费的时间
+
+Histo和ExeHoldHisto的时间分布说明:
+共8段,依次为1毫秒以下, 1-10毫秒,10-100毫秒, 100-1000毫秒,1-10秒,10-100秒,100-1000秒,1000秒以上
+
+FetchRowCountHistogram分布说明
+共5段, 依次为0条记录,1-10条记录,10-100条记录,100-1000条记录, 1000条记录以上

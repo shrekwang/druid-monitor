@@ -1,0 +1,8 @@
+Host:     主机名:在druid.conf中配置                    ActPk:    ActivePeak,最高活动连接数
+MaxAct:   MaxActive, 最大连接数                        ActPkT:   ActivePeakTime,最高活动连接产生的时间         
+MinIdle:  MinIdle, 最小连接数                          PhyCc:    PhysicalConnectCount,物理连接数 
+IniSize:  InitialSize, 初始连接数                      LogicCc:  LogicConnectCount,逻辑连接数
+PoolCt:   PoolingCount,当前空闲连接数                  LCEC:     LogicConnectErrorCount,逻辑连接错误数 
+ActCt:    ActiveCount,当前活动连接数                   PCEC:     PhysicalConnectErrorCount,物理连接错误数 
+PoolPk:   PoolingPeak,最高空闲连接数                   PhyClose: PhysicalCloseCount,物理连接关闭数 
+PoolPkT:  PoolingPeakTime,最高空连接产生的时间        
