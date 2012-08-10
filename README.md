@@ -3,7 +3,7 @@ druid-monitor
 
 druid-monitor is a command-line tool for collecting and displaying druid statistic data from various hosts.
 
-Requirments
+需求
 =============
 
 监控脚本需要python的simplejson模块
@@ -33,4 +33,8 @@ python druid_common.py -h --cfile filename --show dataname
 
 请先用 "python druid_common.py -h"　调用下,看看各个参数的描述.
 
+
+截图
+=============
+![jie tu](http://pic.yupoo.com/shreknull/Cbbz3duC/medish.jpg)
 
