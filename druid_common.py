@@ -8,6 +8,8 @@ from string import maketrans
 from datetime import datetime
 import time
 from colored import ColoredString
+from time import sleep
+import os
 
 
 codepage = sys.getdefaultencoding()
@@ -36,28 +38,38 @@ def fetch_json_result(host,query_path):
 
 def parse_args():
     parser = argparse.ArgumentParser(description='druid monitor utility ')
-    parser.add_argument('--cfile', action="store", 
+    parser.add_argument('-c','--cfile', action="store", 
             dest="cfile", default="druid.conf",
             help='IP地址配置文件,默认值为druid.conf'
             )
 
-    parser.add_argument('--show', action="store", 
+    parser.add_argument('-s','--show', action="store", 
             dest="show_data", 
             help='要显示的数据,可以为datasource或sql, 不设置的话显示全部')
 
-    parser.add_argument('--sort', action="store", 
+    parser.add_argument('-t','--sort', action="store", 
             dest="sort_field", default="Histo",
             help='SQL统计中表格的排序字段,可以是ExeCnt,Histo,MaxTimeSpan,ExeHoldHisto,默认为Histo'
             )
 
-    parser.add_argument('--head', action="store", 
+    parser.add_argument('-n', '--num', action="store", 
             dest="head", default="50",
             help='SQL统计中显示的记录数, 默认50条'
             )
 
-    parser.add_argument('--print-stat-desc', action="store_true", 
+    parser.add_argument('-v','--print-stat-desc', action="store_true", 
             dest="print_stat_desc",
             help='是否打印datasource统计表格的字段说明'
+            )
+
+    parser.add_argument('-N', '--nocolor', action="store_true", 
+            dest="nocolor",
+            help='不按颜色打印(默认是有颜色的)'
+            )
+
+    parser.add_argument('-i','--interval', action="store", 
+            dest="interval",
+            help='自动刷新时间间隔,以秒为单位. 如不指定,则打印后即退出脚本'
             )
 
     return parser.parse_args()
@@ -334,13 +346,24 @@ if __name__ == "__main__" :
     args_info = parse_args()
     host_info = read_conf(args_info.cfile)
     global color_info
-    color_info = read_color_conf()
+
+    if args_info.nocolor:
+        color_info = {}
+    else :
+        color_info = read_color_conf()
+
     if args_info.print_stat_desc :
         print_stat_desc("ds_help.txt")
         print_stat_desc("sql_help.txt")
 
-    if args_info.show_data == "datasource" or args_info.show_data == None:
-        print_ds_tabled_stat(host_info)
-    if args_info.show_data == "sql" or args_info.show_data == None:
-        print_sql_tabled_stat(host_info,args_info.sort_field, int(args_info.head))
+    while True:
+        if args_info.show_data == "datasource" or args_info.show_data == None:
+            print_ds_tabled_stat(host_info)
+        if args_info.show_data == "sql" or args_info.show_data == None:
+            print_sql_tabled_stat(host_info,args_info.sort_field, int(args_info.head))
+
+        if args_info.interval == None :
+            break
+        sleep(int(args_info.interval))
+        os.system("clear")
 
