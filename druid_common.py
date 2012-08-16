@@ -25,6 +25,8 @@ def convert(value):
     return value
 
 def convert_time(value):
+    if value == None or value == "" :
+        return ""
     d1 = datetime.fromtimestamp(value/1000.0)
     return d1.strftime("%m-%d %H:%M:%S")
 
