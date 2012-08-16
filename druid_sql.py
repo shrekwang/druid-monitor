@@ -27,7 +27,9 @@ def print_sql_detailInfo(url, sql_id , color_info):
     data_content = result.get("Content")
 
     formattedSql = data_content.get("formattedSql")
-    print "formattedSql:"
+    if formattedSql == None :
+        formattedSql = data_content.get("SQL")
+    print "SQL:"
     print "=" * 80
     print formattedSql 
     print "=" * 80
