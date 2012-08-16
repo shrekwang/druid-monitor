@@ -1,7 +1,4 @@
 #vim: set fileencoding=utf-8 
-import urllib2
-import simplejson
-import pprint
 import argparse
 import sys
 from string import maketrans
@@ -10,6 +7,7 @@ import time
 from colored import ColoredString
 from time import sleep
 import os
+from druid_base import *
 
 
 codepage = sys.getdefaultencoding()
@@ -23,20 +21,6 @@ def convert(value):
         value = value.encode(codepage)
     value = str(value).rstrip().translate(trantab)
     return value
-
-def convert_time(value):
-    if value == None or value == "" :
-        return ""
-    d1 = datetime.fromtimestamp(value/1000.0)
-    return d1.strftime("%m-%d %H:%M:%S")
-
-def fetch_json_result(host,query_path):
-    url = host + query_path
-    req = urllib2.Request(url, None, {'user-agent':'python'})
-    opener = urllib2.build_opener()
-    f = opener.open(req)
-    result = simplejson.load(f,strict=False)
-    return result
 
 def parse_args():
     parser = argparse.ArgumentParser(description='druid monitor utility ')
@@ -75,37 +59,6 @@ def parse_args():
             )
 
     return parser.parse_args()
-
-def read_conf(cfg_path):
-    lines = open(cfg_path,"r").readlines()
-    cfg_dict = {}
-    for line in lines:
-        if not line.strip() : continue
-        if line[0] == "#" : continue
-        split_index= line.find (" ")
-        if split_index < 0 : continue 
-        key = line[0:split_index].strip()
-        value = line[split_index+1:].strip()
-        cfg_dict[key] = value
-    return cfg_dict
-
-def read_color_conf():
-    file = open("color.conf","r")
-    confs = {}
-    for line in file:
-        if line.strip() == "" : continue
-        if line.strip().startswith("#") : continue
-        split_index= line.find ("=")
-        if split_index < 0 : continue 
-        key = line[0:split_index].strip()
-        value = line[split_index+1:].strip()
-        try :
-            value = eval(value)
-            confs[key] = value
-        except :
-            pass
-    return confs
-
 
 def format_rows(rows):
     maxlens = [0] * len(rows[0])
@@ -165,7 +118,7 @@ def parse_time(value, format_str):
     return strptime(value,format_str)
     
 
-def print_ds_tabled_stat(host_info):
+def print_ds_tabled_stat(color_info, host_info):
     rows = []
     title_row = ["Host","Name","MaxAct","MinIdle","IniSize","PoolCt","ActCt","PoolPk","PoolPkT","ActPk","ActPkT","PhyCc","LogicCc","LCEC","PCEC","PhyClose"]
     rows.append(title_row)
@@ -179,8 +132,8 @@ def print_ds_tabled_stat(host_info):
             row.append(data_content.get("MinIdle"))
             row.append(data_content.get("InitialSize"))
 
-            row.append(get_colored_value(data_content.get("PoolingCount"),"PoolingCount"))
-            row.append(get_colored_value(data_content.get("ActiveCount"),"ActiveCount"))
+            row.append(get_colored_value(color_info,data_content.get("PoolingCount"),"PoolingCount"))
+            row.append(get_colored_value(color_info,data_content.get("ActiveCount"),"ActiveCount"))
             #row.append(data_content.get("PoolingCount"))
             #row.append(data_content.get("ActiveCount"))
 
@@ -200,11 +153,11 @@ def print_ds_tabled_stat(host_info):
             else :
                 row.append("")
 
-            row.append(get_colored_value(data_content.get("PhysicalConnectCount"),"PhysicalConnectCount"))
-            row.append(get_colored_value(data_content.get("LogicConnectCount"),"LogicConnectCount"))
-            row.append(get_colored_value(data_content.get("LogicConnectErrorCount"),"LogicConnectErrorCount"))
-            row.append(get_colored_value(data_content.get("PhysicalConnectErrorCount"),"PhysicalConnectErrorCount"))
-            row.append(get_colored_value(data_content.get("PhysicalCloseCount"),"PhysicalCloseCount"))
+            row.append(get_colored_value(color_info,data_content.get("PhysicalConnectCount"),"PhysicalConnectCount"))
+            row.append(get_colored_value(color_info,data_content.get("LogicConnectCount"),"LogicConnectCount"))
+            row.append(get_colored_value(color_info,data_content.get("LogicConnectErrorCount"),"LogicConnectErrorCount"))
+            row.append(get_colored_value(color_info,data_content.get("PhysicalConnectErrorCount"),"PhysicalConnectErrorCount"))
+            row.append(get_colored_value(color_info,data_content.get("PhysicalCloseCount"),"PhysicalCloseCount"))
 
             #row.append(data_content.get("PhysicalConnectCount"))
             #row.append(data_content.get("LogicConnectCount"))
@@ -223,42 +176,10 @@ def print_ds_tabled_stat(host_info):
     print ""
     print ""
 
-def get_colored_histo(value,name):
-    str_value = ",".join([str(v) for v in value])
-    color_conf = color_info.get(name)
-    if color_conf == None :
-        return str_value
-    sorted_conf = sorted(color_conf.iteritems(),reverse=True)
-    matched_color = None
-    for i in range(len(value)-1,-1,-1):
-        for limit,color in  sorted_conf :
-            if i >= limit and value[i] > 0 :
-                matched_color = color
-                break
-        if matched_color != None :
-            break
-    if matched_color == None :
-        return str_value
-    return ColoredString(str_value,color)
 
-def get_colored_value(value,name):
-    color_conf = color_info.get(name)
-    if color_conf == None :
-        return value
-    sorted_conf = sorted(color_conf.iteritems(),reverse=True)
-    matched_color = None
-    for limit,color in  sorted_conf :
-        if value >= limit : 
-            matched_color = color
-            break
-    if matched_color == None :
-        return value
-    return ColoredString(value,color)
-
-
-def print_sql_tabled_stat(host_info, sort_field, head_count):
+def print_sql_tabled_stat(color_info, host_info, sort_field, head_count):
     rows = []
-    title_row = ["Host", "SQL", "ExeCnt","LastTime","Histo","MaxTimeSpan","MOT","ExeHoldHisto","FetchRowCountHistogram"]
+    title_row = ["Host","ID", "SQL", "ExeCnt","LastTime","Histo","MaxTimeSpan","MOT","ExeHoldHisto","FetchRowCountHistogram"]
 
     rows.append(title_row)
     for host_name in host_info :
@@ -268,25 +189,26 @@ def print_sql_tabled_stat(host_info, sort_field, head_count):
         data_content = filter_sql_result(data_content,sort_field, head_count)
         for item in data_content :
             row = [host_name]
+            row.append(item.get("ID"))
             sql = item.get("SQL").replace("\n"," ").strip()[0:30]
             row.append(convert(sql))
             #row.append(item.get("ResultSetHoldTime"))
-            row.append(get_colored_value(item.get("ExecuteCount"),"ExecuteCount"))
+            row.append(get_colored_value(color_info,item.get("ExecuteCount"),"ExecuteCount"))
 
             row.append(convert_time(item.get("LastTime")))
             #row.append(item.get("EffectedRowCountHistogram"))
-            histogram = get_colored_histo(item.get("Histogram"),"Histogram")
+            histogram = get_colored_histo(color_info,item.get("Histogram"),"Histogram")
             row.append(histogram)
             #row.append(item.get("BatchSizeMax"))
-            row.append(get_colored_value(item.get("MaxTimespan"),"MaxTimespan"))
+            row.append(get_colored_value(color_info,item.get("MaxTimespan"),"MaxTimespan"))
             row.append(convert_time(item.get("MaxTimespanOccurTime")))
             #row.append(item.get("ErrorCount"))
 
-            holdHistor = get_colored_histo(item.get("ExecuteAndResultHoldTimeHistogram"),"ExecuteAndResultHoldTimeHistogram")
+            holdHistor = get_colored_histo(color_info, item.get("ExecuteAndResultHoldTimeHistogram"),"ExecuteAndResultHoldTimeHistogram")
             row.append(holdHistor)
             #row.append(item.get("ConcurrentMax"))
             #row.append(item.get("FetchRowCount"))
-            fetchRowHistor = get_colored_histo(item.get("FetchRowCountHistogram"),"FetchRowCountHistogram")
+            fetchRowHistor = get_colored_histo(color_info,item.get("FetchRowCountHistogram"),"FetchRowCountHistogram")
             row.append(fetchRowHistor)
             #row.append(item.get("InTransactionCount"))
             #row.append(item.get("ID"))
@@ -356,7 +278,6 @@ def filter_sql_result(data_content, sort_field, head_count):
 if __name__ == "__main__" :
     args_info = parse_args()
     host_info = read_conf(args_info.cfile)
-    global color_info
 
     if args_info.nocolor:
         color_info = {}
@@ -369,9 +290,9 @@ if __name__ == "__main__" :
 
     while True:
         if args_info.show_data == "datasource" or args_info.show_data == None:
-            print_ds_tabled_stat(host_info)
+            print_ds_tabled_stat(color_info, host_info)
         if args_info.show_data == "sql" or args_info.show_data == None:
-            print_sql_tabled_stat(host_info,args_info.sort_field, int(args_info.head))
+            print_sql_tabled_stat(color_info, host_info,args_info.sort_field, int(args_info.head))
 
         if args_info.interval == None :
             break
