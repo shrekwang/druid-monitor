@@ -150,6 +150,9 @@ def print_stat_desc(file_name):
     print ""
 
 def parse_time(value, format_str):
+    if value == None or value == "" :
+        return ""
+
     if hasattr(datetime, 'strptime'):
         #python 2.6
         strptime = datetime.strptime
