@@ -185,12 +185,18 @@ def print_ds_tabled_stat(host_info):
             row.append(data_content.get("PoolingPeak"))
 
             pkt_datetime = parse_time(data_content.get("PoolingPeakTime"), "%a %b %d %H:%M:%S CST %Y")
-            row.append(pkt_datetime.strftime("%m-%d %H:%M:%S"))
+            if pkt_datetime != "" :
+                row.append(pkt_datetime.strftime("%m-%d %H:%M:%S"))
+            else :
+                row.append("")
 
             row.append(data_content.get("ActivePeak"))
 
             apt_datetime = parse_time(data_content.get("ActivePeakTime"), "%a %b %d %H:%M:%S CST %Y")
-            row.append(apt_datetime.strftime("%m-%d %H:%M:%S"))
+            if apt_datetime !="" :
+                row.append(apt_datetime.strftime("%m-%d %H:%M:%S"))
+            else :
+                row.append("")
 
             row.append(get_colored_value(data_content.get("PhysicalConnectCount"),"PhysicalConnectCount"))
             row.append(get_colored_value(data_content.get("LogicConnectCount"),"LogicConnectCount"))
