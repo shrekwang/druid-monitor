@@ -43,6 +43,7 @@ def print_sql_detailInfo(url, sql_id , color_info):
     print "=" * 80
     print "" 
 
+    print "DbType:",data_content.get("DbType")
     print "ExecuteCount:" , get_colored_value(color_info, data_content.get("ExecuteCount"),"ExecuteCount")
     print "LastTime:", data_content.get("LastTime")
     histogram = get_colored_histo(color_info, data_content.get("Histogram"),"Histogram")
@@ -50,20 +51,21 @@ def print_sql_detailInfo(url, sql_id , color_info):
     holdHistor = get_colored_histo(color_info , data_content.get("ExecuteAndResultHoldTimeHistogram"),"ExecuteAndResultHoldTimeHistogram")
     print "ExecuteAndHoldHistor:",holdHistor
     fetchRowHistor = get_colored_histo(color_info, data_content.get("FetchRowCountHistogram"),"FetchRowCountHistogram")
-    print "FetchRowCount:", fetchRowHistor
+    print "FetchRowHisto:", fetchRowHistor
     print "ErrorCount:", data_content.get("ErrorCount")
     print "EffectedRowCountHistogram:" , data_content.get("EffectedRowCountHistogram")
     print "ConcurrentMax:", data_content.get("ConcurrentMax")
     print "TotalTime:", data_content.get("TotalTime")
     print "BatchSizeMax:", data_content.get("BatchSizeMax")
     print "RunningCount:",data_content.get("RunningCount")
+    print "FetchRowCountTotal:", data_content.get("FetchRowCount")
+    print "FetchRowCountMax:", data_content.get("FetchRowCountMax")
+    print "EffectedRowCountTotal:",data_content.get("EffectedRowCount")
+    print "EffectedRowCountMax:",data_content.get("EffectedRowCountMax")
 
     #row.append(data_content.get("ResultSetHoldTime"))
-    #row.append(data_content.get("FetchRowCount"))
     #row.append(data_content.get("InTransactionCount"))
     #row.append(data_content.get("ID"))
-    #row.append(data_content.get("EffectedRowCount"))
-    #row.append(data_content.get("DbType"))
 
 if __name__ == "__main__" :
     args_info = parse_args()
