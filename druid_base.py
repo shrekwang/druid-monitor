@@ -56,7 +56,13 @@ def read_conf(cfg_path):
         if split_index < 0 : continue 
         key = line[0:split_index].strip()
         value = line[split_index+1:].strip()
-        cfg_dict[key] = value
+        try :
+            result = fetch_json_result(value,"/druid/datasource.json")
+            cfg_dict[key] = value
+        except Exception , e :
+            print "can't read json data from  the host: " + key
+            print "errorMsg:" + str(e)
+            print ""
     return cfg_dict
 
 def convert_time(value):
