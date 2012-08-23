@@ -5,6 +5,7 @@ druid-monitor is a command-line tool for collecting and displaying druid statist
 
 需求
 =============
+此脚本需要python2.x版本才能运行, python3.x由于同2.x不兼容,暂不支持
 
 监控脚本需要python的simplejson模块
 如果是redhat系的(rhel, fedora, centos等),可以用yum来安装
@@ -21,8 +22,6 @@ yum install python-simplejson
       <url-pattern>/druid/*</url-pattern>
     </servlet-mapping>
   
-
-
 
 
 使用
@@ -67,6 +66,7 @@ yum install python-simplejson
     总共有两个配置文件 druid.conf和color.conf
     druid.conf用来配置要监控的主机,每行两个字段　机器名和url, 以空格分隔,可以用"#"来注释
     color.conf用来配置监控输出的颜色, 在这个文件里有较详细的说明,有需要定制的可以查看这个文件.
+    (由于color基于ansi的控制序列, 只能在linux控制台下显示. 在windows下只是普通输出,不会有颜色效果)
 
 截图
 =============
