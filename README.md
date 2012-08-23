@@ -28,10 +28,39 @@ yum install python-simplejson
 使用
 =============
 
-python druid_common.py -h --cfile filename --show dataname
-      --sort sortfield --head headcount --print-stat-desc
+    命令1: 打印datasource和sql统计
 
-请先用 "python druid_common.py -h"　调用下,看看各个参数的描述.
+    python druid_common.py [-h] [-c CFILE] [-s SHOW_DATA] [-t SORT_FIELD]
+                           [-n HEAD] [-v] [-N] [-i INTERVAL]
+
+    optional arguments:
+      -h, --help            show this help message and exit
+      -c CFILE, --cfile CFILE
+                            IP地址配置文件,默认值为druid.conf
+      -s SHOW_DATA, --show SHOW_DATA
+                            要显示的数据,可以为datasource或sql, 不设置的话显示全部
+      -t SORT_FIELD, --sort SORT_FIELD
+                            SQL统计中表格的排序字段,可以是ExeCnt,Histo,MaxTimeSpan
+                            ,ExeHoldHisto,默认为Histo
+      -n HEAD, --num HEAD   SQL统计中显示的记录数, 默认50条
+      -v, --print-stat-desc
+                            是否打印datasource统计表格的字段说明
+      -N, --nocolor         不按颜色打印(默认是有颜色的)
+      -i INTERVAL, --interval INTERVAL
+                            自动刷新时间间隔,以秒为单位.
+                            如不指定,则打印后即退出脚本
+
+    命令2: 打印单条SQL的细节信息
+    python druid_sql.py [-h] [-c CFILE] [-n SQL_ID] [--host HOST]
+
+    optional arguments:
+      -h, --help            show this help message and exit
+      -c CFILE, --cfile CFILE
+                            IP地址配置文件,默认值为druid.conf
+      -n SQL_ID, --id SQL_ID
+                            要打印详细信息的sql的id
+      --host HOST           主机名, 要跟cfile里的配置一致,根据主机名查找url
+    
 
 
 截图
