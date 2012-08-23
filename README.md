@@ -61,7 +61,12 @@ yum install python-simplejson
                             要打印详细信息的sql的id
       --host HOST           主机名, 要跟cfile里的配置一致,根据主机名查找url
     
+配置
+=============
 
+    总共有两个配置文件 druid.conf和color.conf
+    druid.conf用来配置要监控的主机,每行两个字段　机器名和url, 以空格分隔,可以用"#"来注释
+    color.conf用来配置监控输出的颜色, 在这个文件里有较详细的说明,有需要定制的可以查看这个文件.
 
 截图
 =============
