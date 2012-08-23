@@ -71,4 +71,4 @@ yum install python-simplejson
 截图
 =============
 ![jie tu](http://pic.yupoo.com/shreknull/Cbbz3duC/medish.jpg)
-
+![jie tu2](http://pic.yupoo.com/shreknull/CdaDKXPU/medish.jpg)
