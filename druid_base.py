@@ -1,5 +1,6 @@
 #vim: set fileencoding=utf-8
 
+import os
 import sys
 import urllib2
 import simplejson
@@ -9,6 +10,8 @@ from colored import ColoredString
 
 
 def convert_sys_encode(value):
+    if os.name == "posix" :
+        return value
     codepage=sys.getdefaultencoding()
     try :
         value=unicode(value,"utf-8")
