@@ -1,10 +1,21 @@
 #vim: set fileencoding=utf-8
 
+import sys
 import urllib2
 import simplejson
 from datetime import datetime
 import time
 from colored import ColoredString
+
+
+def convert_sys_encode(value):
+    codepage=sys.getdefaultencoding()
+    try :
+        value=unicode(value,"utf-8")
+        result=value.encode(codepage,"replace")
+        return result
+    except :
+        return value
 
 def get_colored_value(color_info, value,name):
     color_conf = color_info.get(name)

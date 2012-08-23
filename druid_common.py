@@ -26,36 +26,36 @@ def parse_args():
     parser = argparse.ArgumentParser(description='druid monitor utility ')
     parser.add_argument('-c','--cfile', action="store", 
             dest="cfile", default="druid.conf",
-            help='IP地址配置文件,默认值为druid.conf'
+            help=convert_sys_encode('IP地址配置文件,默认值为druid.conf')
             )
 
     parser.add_argument('-s','--show', action="store", 
             dest="show_data", 
-            help='要显示的数据,可以为datasource或sql, 不设置的话显示全部')
+            help=convert_sys_encode('要显示的数据,可以为datasource或sql, 不设置的话显示全部'))
 
     parser.add_argument('-t','--sort', action="store", 
             dest="sort_field", default="Histo",
-            help='SQL统计中表格的排序字段,可以是ExeCnt,Histo,MaxTimeSpan,ExeHoldHisto,默认为Histo'
+            help=convert_sys_encode('SQL统计中表格的排序字段,可以是ExeCnt,Histo,MaxTimeSpan,ExeHoldHisto,默认为Histo')
             )
 
     parser.add_argument('-n', '--num', action="store", 
             dest="head", default="50",
-            help='SQL统计中显示的记录数, 默认50条'
+            help=convert_sys_encode('SQL统计中显示的记录数, 默认50条')
             )
 
     parser.add_argument('-v','--print-stat-desc', action="store_true", 
             dest="print_stat_desc",
-            help='是否打印datasource统计表格的字段说明'
+            help=convert_sys_encode('是否打印datasource统计表格的字段说明')
             )
 
     parser.add_argument('-N', '--nocolor', action="store_true", 
             dest="nocolor",
-            help='不按颜色打印(默认是有颜色的)'
+            help=convert_sys_encode('不按颜色打印(默认是有颜色的)')
             )
 
     parser.add_argument('-i','--interval', action="store", 
             dest="interval",
-            help='自动刷新时间间隔,以秒为单位. 如不指定,则打印后即退出脚本'
+            help=convert_sys_encode('自动刷新时间间隔,以秒为单位. 如不指定,则打印后即退出脚本')
             )
 
     return parser.parse_args()
@@ -101,7 +101,7 @@ def format_rows(rows):
 
 def print_stat_desc(file_name):
     for line in open(file_name):
-        print line.replace("\n","")
+        print convert_sys_encode(line.replace("\n",""))
     print ""
 
 def parse_time(value, format_str):
@@ -297,5 +297,9 @@ if __name__ == "__main__" :
         if args_info.interval == None :
             break
         sleep(int(args_info.interval))
-        os.system("clear")
+
+        if os.name == "posix" :
+            os.system("clear")
+        else :
+            os.system("cls")
 

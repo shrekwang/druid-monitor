@@ -8,16 +8,16 @@ def parse_args():
     parser = argparse.ArgumentParser(description='druid monitor utility ')
     parser.add_argument('-c','--cfile', action="store", 
             dest="cfile", default="druid.conf",
-            help='IP地址配置文件,默认值为druid.conf'
+            help=convert_sys_encode('IP地址配置文件,默认值为druid.conf')
             )
 
     parser.add_argument('-n','--id', action="store", 
             dest="sql_id", 
-            help='要打印详细信息的sql的id')
+            help=convert_sys_encode('要打印详细信息的sql的id'))
 
     parser.add_argument('--host', action="store", 
             dest="host", 
-            help='主机名, 要跟cfile里的配置一致,根据主机名查找url'
+            help=convert_sys_encode('主机名, 要跟cfile里的配置一致,根据主机名查找url')
             )
     return parser.parse_args()
 
