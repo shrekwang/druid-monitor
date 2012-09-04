@@ -31,7 +31,7 @@ def parse_args():
 
     parser.add_argument('-s','--show', action="store", 
             dest="show_data", 
-            help=convert_sys_encode('要显示的数据,可以为datasource或sql, 不设置的话显示全部'))
+            help=convert_sys_encode('要显示的数据,可以为ds或sql或act, 不设置的话显示ds+sql, act为活动连接堆栈信息'))
 
     parser.add_argument('-t','--sort', action="store", 
             dest="sort_field", default="Histo",
@@ -56,6 +56,11 @@ def parse_args():
     parser.add_argument('-i','--interval', action="store", 
             dest="interval",
             help=convert_sys_encode('自动刷新时间间隔,以秒为单位. 如不指定,则打印后即退出脚本')
+            )
+
+    parser.add_argument('-r','--reset', action="store_true", 
+            dest="resetAll",
+            help=convert_sys_encode('重置所有已配置的主机的统计数据(不能和其他选项合用)')
             )
 
     return parser.parse_args()
@@ -274,6 +279,21 @@ def filter_sql_result(data_content, sort_field, head_count):
     data_content = data_content[0:head_count]
     return data_content
 
+def print_activeconn_info(host_info):
+    rows = []
+    for host_name in host_info :
+        url = host_info[host_name]
+        result = fetch_json_result(url,"/druid/activeConnectionStackTrace.json")
+        content =  result.get("Content")
+        if len(content) == 0 :
+            print "no active connection at current time."
+        for act_info in content :
+            for stack_info in act_info :
+                lines =  stack_info.split("\n")
+                for line in lines :
+                    print line
+                print "-"*100
+
 
 if __name__ == "__main__" :
     args_info = parse_args()
@@ -288,11 +308,24 @@ if __name__ == "__main__" :
         print_stat_desc("ds_help.txt")
         print_stat_desc("sql_help.txt")
 
+    if args_info.resetAll:
+        for host_name in host_info :
+            url = host_info[host_name]
+            result = fetch_json_result(url,"/druid/reset-all.json")
+            result_code =  result.get("ResultCode")
+            if result_code == 1 :
+                print "reset " + host_name +" stat data successed."
+            else :
+                print "fail to reset "+ host_name + " stat data ."
+        sys.exit()
+
     while True:
         if args_info.show_data == "datasource" or args_info.show_data == None:
             print_ds_tabled_stat(color_info, host_info)
         if args_info.show_data == "sql" or args_info.show_data == None:
             print_sql_tabled_stat(color_info, host_info,args_info.sort_field, int(args_info.head))
+        if args_info.show_data == "act" :
+            print_activeconn_info(host_info)
 
         if args_info.interval == None :
             break
