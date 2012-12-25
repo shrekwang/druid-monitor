@@ -23,44 +23,15 @@ def convert(value):
     return value
 
 def parse_args():
-    parser = argparse.ArgumentParser(description='druid monitor utility ')
+    parser = argparse.ArgumentParser(description='druid stat print utility')
     parser.add_argument('-c','--cfile', action="store", 
             dest="cfile", default="druid.conf",
             help=convert_sys_encode('IP地址配置文件,默认值为druid.conf')
             )
 
-    parser.add_argument('-s','--show', action="store", 
-            dest="show_data", 
-            help=convert_sys_encode('要显示的数据,可以为ds或sql或act, 不设置的话显示ds+sql, act为活动连接堆栈信息'))
-
-    parser.add_argument('-t','--sort', action="store", 
-            dest="sort_field", default="Histo",
-            help=convert_sys_encode('SQL统计中表格的排序字段,可以是ExeCnt,Histo,MaxTimeSpan,ExeHoldHisto,默认为Histo')
-            )
-
-    parser.add_argument('-n', '--num', action="store", 
-            dest="head", default="50000",
-            help=convert_sys_encode('SQL统计中显示的记录数, 默认50条')
-            )
-
-    parser.add_argument('-v','--print-stat-desc', action="store_true", 
-            dest="print_stat_desc",
-            help=convert_sys_encode('是否打印datasource统计表格的字段说明')
-            )
-
-    parser.add_argument('-N', '--nocolor', action="store_true", 
-            dest="nocolor",
-            help=convert_sys_encode('不按颜色打印(默认是有颜色的)')
-            )
-
-    parser.add_argument('-i','--interval', action="store", 
-            dest="interval",
-            help=convert_sys_encode('自动刷新时间间隔,以秒为单位. 如不指定,则打印后即退出脚本')
-            )
-
-    parser.add_argument('-r','--reset', action="store_true", 
-            dest="resetAll",
-            help=convert_sys_encode('重置所有已配置的主机的统计数据(不能和其他选项合用)')
+    parser.add_argument('-d','--logdir', action="store", 
+            dest="logdir", default=".",
+            help=convert_sys_encode('打印日志的目录')
             )
 
     return parser.parse_args()
@@ -80,7 +51,7 @@ def parse_time(value, format_str):
     return strptime(value,format_str)
     
 
-def print_ds_tabled_stat(conf_name, color_info, host_info, stat_time):
+def print_ds_tabled_stat(conf_name, logdir, host_info, stat_time):
     rows = []
     for host_name in host_info :
         url = host_info[host_name]
@@ -128,14 +99,14 @@ def print_ds_tabled_stat(conf_name, color_info, host_info, stat_time):
 
     formated_rows = ["#".join([str(ele) for ele in row]) for row in rows]
 
-    wfile = open(conf_name + "_DataSource.log","w")
+    wfile = open(os.path.join(logdir , "DataSource.log"),"a")
     for line in formated_rows :
         wfile.write(line)
         wfile.write("\n")
     wfile.close()
 
 
-def print_sql_tabled_stat(conf_name,color_info, host_info, stat_time):
+def print_sql_tabled_stat(conf_name, logdir, host_info, stat_time):
     rows = []
 
     for host_name in host_info :
@@ -153,17 +124,17 @@ def print_sql_tabled_stat(conf_name,color_info, host_info, stat_time):
 
             row.append(convert_time(item.get("LastTime")))
             #row.append(item.get("EffectedRowCountHistogram"))
-            row.append(item.get("Histogram"))
+            row.append(str(item.get("Histogram")).replace(" ",""))
             #row.append(item.get("BatchSizeMax"))
             row.append(item.get("MaxTimespan"))
             row.append(convert_time(item.get("MaxTimespanOccurTime")))
             #row.append(item.get("ErrorCount"))
 
-            holdHistor = item.get("ExecuteAndResultHoldTimeHistogram")
+            holdHistor = str(item.get("ExecuteAndResultHoldTimeHistogram")).replace(" ","")
             row.append(holdHistor)
             #row.append(item.get("ConcurrentMax"))
             #row.append(item.get("FetchRowCount"))
-            fetchRowHistor = item.get("FetchRowCountHistogram")
+            fetchRowHistor = str(item.get("FetchRowCountHistogram")).replace(" ","")
             row.append(fetchRowHistor)
             #row.append(item.get("InTransactionCount"))
             #row.append(item.get("ID"))
@@ -172,11 +143,10 @@ def print_sql_tabled_stat(conf_name,color_info, host_info, stat_time):
             #row.append(item.get("EffectedRowCount"))
             #row.append(item.get("DbType"))
             rows.append(row)
-        rows.append([])
 
     formated_rows = ["#".join([str(ele) for ele in row]) for row in rows]
    
-    wfile = open(conf_name + "_SQL.log","w")
+    wfile = open(os.path.join(logdir , "SQL.log"),"a")
     for line in formated_rows :
         wfile.write(line)
         wfile.write("\n")
@@ -187,31 +157,15 @@ def print_sql_tabled_stat(conf_name,color_info, host_info, stat_time):
 if __name__ == "__main__" :
     args_info = parse_args()
     host_info = read_conf(args_info.cfile)
-    color_info = {}
     
-    if args_info.resetAll:
-        for host_name in host_info :
-            url = host_info[host_name]
-            result = fetch_json_result(url,"/druid/reset-all.json")
-            result_code =  result.get("ResultCode")
-            if result_code == 1 :
-                print "reset " + host_name +" stat data successed."
-            else :
-                print "fail to reset "+ host_name + " stat data ."
-        sys.exit()
+    stat_time = strftime("%Y-%m-%d %H:%M:%S", localtime())
     conf_name = args_info.cfile
     if conf_name != "" and ( conf_name.startswith("druid_") or conf_name.startswith("druid-")):
         conf_name,_ = os.path.splitext(conf_name)
         conf_name = conf_name[6:]
 
-    stat_time = strftime("%Y-%m-%d %H:%M:%S", localtime())
-    if args_info.show_data == "datasource" or args_info.show_data == None:
-        print_ds_tabled_stat(conf_name,color_info, host_info, stat_time)
-
-    print ""
-
-    if args_info.show_data == "sql" or args_info.show_data == None:
-        print_sql_tabled_stat(conf_name,color_info, host_info, stat_time)
+    print_ds_tabled_stat(conf_name, args_info.logdir, host_info, stat_time)
+    print_sql_tabled_stat(conf_name,args_info.logdir, host_info, stat_time)
     
 
 
