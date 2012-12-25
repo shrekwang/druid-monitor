@@ -16,6 +16,15 @@ intab = "\x00\x01\x0d\x0a\x09"
 outtab = "01   "
 trantab = maketrans(intab, outtab)
 
+def convert_time2(value):
+    if value == None or value == "" :
+        return ""
+    try :
+        d1 = datetime.fromtimestamp(value/1000.0)
+        return d1.strftime("%Y-%m-%d %H:%M:%S")
+    except :
+        return value
+
 def convert(value):
     if isinstance(value,unicode) :
         value = value.encode(codepage)
@@ -51,7 +60,7 @@ def parse_time(value, format_str):
     return strptime(value,format_str)
     
 
-def print_ds_tabled_stat(conf_name, logdir, host_info, stat_time):
+def log_ds_tabled_stat(conf_name, logdir, host_info, stat_time):
     rows = []
     for host_name in host_info :
         url = host_info[host_name]
@@ -106,7 +115,7 @@ def print_ds_tabled_stat(conf_name, logdir, host_info, stat_time):
     wfile.close()
 
 
-def print_sql_tabled_stat(conf_name, logdir, host_info, stat_time):
+def log_sql_tabled_stat(conf_name, logdir, host_info, stat_time):
     rows = []
 
     for host_name in host_info :
@@ -115,6 +124,7 @@ def print_sql_tabled_stat(conf_name, logdir, host_info, stat_time):
         data_content =  result.get("Content")
         for item in data_content :
             row = [stat_time]
+            row.append(conf_name)
             row.append(host_name)
             row.append(item.get("ID"))
             sql = item.get("SQL").replace("\n"," ").strip()[0:30]
@@ -122,19 +132,19 @@ def print_sql_tabled_stat(conf_name, logdir, host_info, stat_time):
             #row.append(item.get("ResultSetHoldTime"))
             row.append(item.get("ExecuteCount"))
 
-            row.append(convert_time(item.get("LastTime")))
+            row.append(convert_time2(item.get("LastTime")))
             #row.append(item.get("EffectedRowCountHistogram"))
-            row.append(str(item.get("Histogram")).replace(" ",""))
+            row.append(str(item.get("Histogram"))[1:-1].replace(" ",""))
             #row.append(item.get("BatchSizeMax"))
             row.append(item.get("MaxTimespan"))
-            row.append(convert_time(item.get("MaxTimespanOccurTime")))
+            row.append(convert_time2(item.get("MaxTimespanOccurTime")))
             #row.append(item.get("ErrorCount"))
 
-            holdHistor = str(item.get("ExecuteAndResultHoldTimeHistogram")).replace(" ","")
+            holdHistor = str(item.get("ExecuteAndResultHoldTimeHistogram"))[1:-1].replace(" ","")
             row.append(holdHistor)
             #row.append(item.get("ConcurrentMax"))
             #row.append(item.get("FetchRowCount"))
-            fetchRowHistor = str(item.get("FetchRowCountHistogram")).replace(" ","")
+            fetchRowHistor = str(item.get("FetchRowCountHistogram"))[1:-1].replace(" ","")
             row.append(fetchRowHistor)
             #row.append(item.get("InTransactionCount"))
             #row.append(item.get("ID"))
@@ -164,8 +174,8 @@ if __name__ == "__main__" :
         conf_name,_ = os.path.splitext(conf_name)
         conf_name = conf_name[6:]
 
-    print_ds_tabled_stat(conf_name, args_info.logdir, host_info, stat_time)
-    print_sql_tabled_stat(conf_name,args_info.logdir, host_info, stat_time)
+    log_ds_tabled_stat(conf_name, args_info.logdir, host_info, stat_time)
+    log_sql_tabled_stat(conf_name,args_info.logdir, host_info, stat_time)
     
 
 
