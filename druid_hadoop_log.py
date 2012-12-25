@@ -81,14 +81,14 @@ def log_ds_tabled_stat(conf_name, logdir, host_info, stat_time):
 
             pkt_datetime = parse_time(data_content.get("PoolingPeakTime"), "%a %b %d %H:%M:%S CST %Y")
             if pkt_datetime != "" :
-                row.append(pkt_datetime.strftime("%m-%d %H:%M:%S"))
+                row.append(pkt_datetime.strftime("%Y-%m-%d %H:%M:%S"))
             else :
                 row.append("")
 
             row.append(data_content.get("ActivePeak"))
             apt_datetime = parse_time(data_content.get("ActivePeakTime"), "%a %b %d %H:%M:%S CST %Y")
             if apt_datetime !="" :
-                row.append(apt_datetime.strftime("%m-%d %H:%M:%S"))
+                row.append(apt_datetime.strftime("%Y-%m-%d %H:%M:%S"))
             else :
                 row.append("")
 
