@@ -8,6 +8,7 @@ from colored import ColoredString
 from time import localtime, strftime
 import os
 from druid_base import *
+import re
 
 
 codepage = sys.getdefaultencoding()
@@ -122,6 +123,8 @@ def log_sql_tabled_stat(conf_name, logdir, host_info, stat_time):
         url = host_info[host_name]
         result = fetch_json_result(url,"/druid/sql.json")
         data_content =  result.get("Content")
+        if data_content == None:
+            continue
         for item in data_content :
             row = [stat_time]
             row.append(conf_name)
@@ -170,9 +173,14 @@ if __name__ == "__main__" :
     
     stat_time = strftime("%Y-%m-%d %H:%M:%S", localtime())
     conf_name = args_info.cfile
-    if conf_name != "" and ( conf_name.startswith("druid_") or conf_name.startswith("druid-")):
-        conf_name,_ = os.path.splitext(conf_name)
-        conf_name = conf_name[6:]
+    pat = re.compile("druid_(?P<name>.*).conf")
+    if conf_name != "" :
+        match = pat.search(conf_name)
+        if match != None :
+            conf_name = match.group("name")
+
+    if conf_name == "":
+        conf_name = "default"
 
     log_ds_tabled_stat(conf_name, args_info.logdir, host_info, stat_time)
     log_sql_tabled_stat(conf_name,args_info.logdir, host_info, stat_time)
