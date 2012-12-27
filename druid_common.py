@@ -191,6 +191,8 @@ def print_sql_tabled_stat(color_info, host_info, sort_field, head_count):
         url = host_info[host_name]
         result = fetch_json_result(url,"/druid/sql.json")
         data_content =  result.get("Content")
+        if data_content == None:
+            continue
         data_content = filter_sql_result(data_content,sort_field, head_count)
         for item in data_content :
             row = [host_name]
