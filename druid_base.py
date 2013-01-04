@@ -89,7 +89,8 @@ def convert_time(value):
         return value
 
 def read_color_conf():
-    file = open("color.conf","r")
+    conf_path =os.path.join(os.path.dirname(os.path.abspath(__file__)), "color.conf")
+    file = open(conf_path,"r")
     confs = {}
     for line in file:
         if line.strip() == "" : continue
