@@ -9,8 +9,12 @@ from time import localtime, strftime
 import os
 from druid_base import *
 import re
-import hashlib
 
+#for python2.4 where there's no hashlib
+try: 
+   from hashlib import md5
+except ImportError:
+   from md5 import md5
 
 codepage = sys.getdefaultencoding()
 #translate control characters
@@ -152,7 +156,7 @@ def log_sql_tabled_stat(conf_name, logdir, host_info, stat_time):
             fetchRowHistor = str(item.get("FetchRowCountHistogram"))[1:-1].replace(" ","")
             row.append(fetchRowHistor)
 
-            row.append(hashlib.md5(item.get("SQL")).hexdigest())
+            row.append(md5(item.get("SQL")).hexdigest())
             #row.append(item.get("InTransactionCount"))
             #row.append(item.get("ID"))
             #row.append(item.get("RunningCount"))
