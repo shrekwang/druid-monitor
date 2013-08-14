@@ -112,7 +112,10 @@ def print_stat_desc(file_name):
 def parse_time(value, format_str):
     if value == None or value == "" :
         return ""
-
+    #already formatted in "2013-08-14 09:24:22" format
+    if len(value) == 19 :
+        return value
+    
     if hasattr(datetime, 'strptime'):
         #python 2.6
         strptime = datetime.strptime
@@ -145,7 +148,7 @@ def print_ds_tabled_stat(color_info, host_info):
             row.append(data_content.get("PoolingPeak"))
 
             pkt_datetime = parse_time(data_content.get("PoolingPeakTime"), "%a %b %d %H:%M:%S CST %Y")
-            if pkt_datetime != "" :
+            if not isinstance(pkt_datetime,str)   :
                 row.append(pkt_datetime.strftime("%m-%d %H:%M:%S"))
             else :
                 row.append("")
@@ -153,7 +156,7 @@ def print_ds_tabled_stat(color_info, host_info):
             row.append(data_content.get("ActivePeak"))
 
             apt_datetime = parse_time(data_content.get("ActivePeakTime"), "%a %b %d %H:%M:%S CST %Y")
-            if apt_datetime !="" :
+            if not isinstance(apt_datetime,str)   :
                 row.append(apt_datetime.strftime("%m-%d %H:%M:%S"))
             else :
                 row.append("")
