@@ -156,7 +156,7 @@ def log_sql_tabled_stat(conf_name, logdir, host_info, stat_time):
             fetchRowHistor = str(item.get("FetchRowCountHistogram"))[1:-1].replace(" ","")
             row.append(fetchRowHistor)
 
-            row.append(md5(item.get("SQL")).hexdigest())
+            row.append(md5(convert(item.get("SQL"))).hexdigest())
             #row.append(item.get("InTransactionCount"))
             #row.append(item.get("ID"))
             #row.append(item.get("RunningCount"))
