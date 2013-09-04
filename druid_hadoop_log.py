@@ -56,6 +56,10 @@ def parse_time(value, format_str):
     if value == None or value == "" :
         return ""
 
+    #already formatted in "2013-08-14 09:24:22" format
+    if len(value) == 19 :
+        return value
+
     if hasattr(datetime, 'strptime'):
         #python 2.6
         strptime = datetime.strptime
