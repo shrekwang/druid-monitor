@@ -90,17 +90,17 @@ def log_ds_tabled_stat(conf_name, logdir, host_info, stat_time):
             row.append(data_content.get("PoolingPeak"))
 
             pkt_datetime = parse_time(data_content.get("PoolingPeakTime"), "%a %b %d %H:%M:%S CST %Y")
-            if pkt_datetime != "" :
+            if not isinstance(pkt_datetime,str)   :
                 row.append(pkt_datetime.strftime("%Y-%m-%d %H:%M:%S"))
             else :
-                row.append("")
+                row.append(pkt_datetime)
 
             row.append(data_content.get("ActivePeak"))
             apt_datetime = parse_time(data_content.get("ActivePeakTime"), "%a %b %d %H:%M:%S CST %Y")
-            if apt_datetime !="" :
+            if not isinstance(apt_datetime,str)   :
                 row.append(apt_datetime.strftime("%Y-%m-%d %H:%M:%S"))
             else :
-                row.append("")
+                row.append(apt_datetime)
 
             row.append(data_content.get("PhysicalConnectCount"))
             row.append(data_content.get("LogicConnectCount"))

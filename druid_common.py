@@ -151,7 +151,7 @@ def print_ds_tabled_stat(color_info, host_info):
             if not isinstance(pkt_datetime,str)   :
                 row.append(pkt_datetime.strftime("%m-%d %H:%M:%S"))
             else :
-                row.append("")
+                row.append(pkt_datetime)
 
             row.append(data_content.get("ActivePeak"))
 
@@ -159,7 +159,7 @@ def print_ds_tabled_stat(color_info, host_info):
             if not isinstance(apt_datetime,str)   :
                 row.append(apt_datetime.strftime("%m-%d %H:%M:%S"))
             else :
-                row.append("")
+                row.append(apt_datetime)
 
             row.append(get_colored_value(color_info,data_content.get("PhysicalConnectCount"),"PhysicalConnectCount"))
             row.append(get_colored_value(color_info,data_content.get("LogicConnectCount"),"LogicConnectCount"))
